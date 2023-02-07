@@ -11,14 +11,12 @@ const accounts = {
 
 interface FaucetConfig {
 	amount: string;
-	applicationUrl: string;
 	tokenPrefix: string;
 	logoURL?: string;
 }
 
 const defaultFaucetConfig: FaucetConfig = {
 	amount: '100',
-	applicationUrl: 'ws://localhost:8080/ws',
 	tokenPrefix: 'lsk',
 };
 
@@ -70,30 +68,29 @@ const App: React.FC = () => {
 	};
 
 	const onSubmit = async () => {
-        getClient().then(async (client) => {
-            console.log("input:", input);
-            const address = cryptography.getAddressFromBase32Address(input);
-            const tx = await client.transaction.create({
-                moduleID: 2,
-                assetID: 0,
-                fee: BigInt(transactions.convertLSKToBeddows('0.01')),
-                asset: {
-                    amount: BigInt(transactions.convertLSKToBeddows(config.amount)),
-                    recipientAddress: address,
-                    data: 'BZR is sending Token for free'
-                },
-            }, accounts.genesis.passphrase);
+        const client = await getClient();        
+        console.log("input:", input);
+        const address = cryptography.getAddressFromBase32Address(input);
+        const tx = await client.transaction.create({
+            moduleID: 2,
+            assetID: 0,
+            fee: BigInt(transactions.convertLSKToBeddows('0.01')),
+            asset: {
+                amount: BigInt(transactions.convertLSKToBeddows(config.amount)),
+                recipientAddress: address,
+                data: 'BZR is sending Token for free'
+            },
+        }, accounts.genesis.passphrase);
 
-            const response = await client.transaction.send(tx);
-            console.log("ejecutado");
-            updateState({
-                transaction: client.transaction.toJSON(tx),
-                address: input,
-                amount: config.amount,
-                response: response
+        const response = await client.transaction.send(tx);
+        console.log("ejecutado");
+        updateState({
+            transaction: client.transaction.toJSON(tx),
+            address: input,
+            amount: config.amount,
+            response: response
             });
-        })
-	
+        
 	};
 	return (
 		<main className="container">
