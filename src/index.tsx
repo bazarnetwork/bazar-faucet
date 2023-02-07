@@ -9,6 +9,10 @@ const root = ReactDOM.createRoot(
   
 root.render(
   <React.StrictMode>
-    <App />
+    <App />    
+    <footer>
+        <small></small>
+        </footer>
   </React.StrictMode>
+  
 );

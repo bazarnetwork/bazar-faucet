@@ -5,7 +5,7 @@ import { getClient } from './getClient';
 
 const accounts = {
     "genesis": {
-        "passphrase": ""
+        "passphrase": "path satisfy finish modify pride still broken pretty adapt bulb raven salute"
     }
 };
 
@@ -71,6 +71,7 @@ const App: React.FC = () => {
 
 	const onSubmit = async () => {
         getClient().then(async (client) => {
+            console.log("input:", input);
             const address = cryptography.getAddressFromBase32Address(input);
             const tx = await client.transaction.create({
                 moduleID: 2,
@@ -83,7 +84,8 @@ const App: React.FC = () => {
                 },
             }, accounts.genesis.passphrase);
 
-            const response = await client.transaction.send(tx);        
+            const response = await client.transaction.send(tx);
+            console.log("ejecutado");
             updateState({
                 transaction: client.transaction.toJSON(tx),
                 address: input,
@@ -94,37 +96,35 @@ const App: React.FC = () => {
 	
 	};
 	return (
-		<div>
-            <h2>Faucet - Bazar Network</h2>
-			
-				<div className="flex flex-col items-center mt-16">
-					<h1 className="text-4xl text-center">All tokens are for testing purposes only</h1>
-					<h2>
-						Please enter your address to receive {config.amount}{' '}
-						BZR tokens for free
-					</h2>
-					<div>
-						<div>
-							<input								
-								value={input}
-								onChange={e => onChange(e.target.value)}
-							/>
-							{errorMsg ? <WarningIcon /> : <span />}
-							{errorMsg ? <span>{errorMsg}</span> : <span />}
-						</div>
-						<button className="bg-black text-white p-2.5 w-fit mt-9 " onClick={onSubmit}>
-							Receive
-						</button>
-					</div>
-                    <div> { state.address ? (
-                        <pre>Completed, Address: {state.address} Token amount: {state.amount} BZR Token amount: {state.amount} BZR</pre>
+		<main className="container">
+            <article className="grid">
+                <div>
+                <hgroup>
+                    <h1>Bazar Network Faucet</h1>	
+                    <h2>Testnet BZR covers transactions for testing purposes</h2>
+                    </hgroup>
+                        <input	
+                            id='formAccount'
+                            name='formAccount'					
+                            value={input}
+                            placeholder='Input your Bazar Network address'
+                            onChange={e => onChange(e.target.value)}
+                        />
+                        {errorMsg ? <WarningIcon /> : <span />}
+                        {errorMsg ? <span>{errorMsg}</span> : <span />}
+                            
+                        <button onClick={onSubmit}>Receive 100 BZR</button>
                         
-                    ): (<pre></pre>
-                       )
-                    }
-                    </div>				
-				</div>
-		</div>
+                        <div> { state.address ? (
+                            <pre>Completed, Address: {state.address} Token amount: {state.amount} BZR Token amount: {state.amount} BZR</pre>
+                            
+                        ): (<pre></pre>
+                        )
+                        }
+                        </div>				
+                    </div>
+            </article>
+		</main>
 	);
 };
 
