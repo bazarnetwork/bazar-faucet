@@ -5,7 +5,7 @@ import { getClient } from './getClient';
 
 const accounts = {
     "genesis": {
-        "passphrase": "path satisfy finish modify pride still broken pretty adapt bulb raven salute"
+        "passphrase": ""
     }
 };
 
